@@ -13,14 +13,19 @@ export type tTask={
 	time:string,
 	id:number
 }
+
+interface IAddTaskProps{ onAddTask: (task: tTask) => void
+}
 export type tLoadedFile={ data:string | ArrayBuffer | null,title: string}
-const AddTask = ({onAddTask}: { onAddTask: (task: tTask) => void }): JSX.Element => {
+
+const AddTask = ({onAddTask}: IAddTaskProps): JSX.Element => {
 	const [taskData, setTaskData] = useState<{title:string,description:string}>({title:'',description:''})
 	const [titleAlert,setTitleAlert]=useState(false)
 	const [descAlert,setDescAlert]=useState(false)
 	const [loadedFiles,setLoadedFiles]=useState<tLoadedFile[]>([])
 	const [time,setTime]=useState(null)
 	const [date,setDate]=useState(null)
+
 	const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
 		//todo clean inputs
 		e.preventDefault()

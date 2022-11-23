@@ -4,15 +4,17 @@ import {Simulate} from "react-dom/test-utils";
 import timeUpdate = Simulate.timeUpdate;
 import {useState} from "react";
 
-const Task = ({task,onDeleteTask}: { task: tTask,onDeleteTask:(id:number)=>void }): JSX.Element => {
+interface ITaskProps {
+	task: tTask,onDeleteTask:(id:number)=>void,onEditTask:(id:number)=>void
+}
+const Task = ({task,onDeleteTask,onEditTask}: ITaskProps): JSX.Element => {
 	const [showTask, setShowTask] = useState(false)
-
 	return (
 		<>
 			<li>
 				<span>{task.title}</span>
 				<span>{task.date}-{task.time}</span>
-				<button>edit</button>
+				<button onClick={()=>onEditTask(task.id)}>edit</button>
 				<button onClick={()=>onDeleteTask(task.id)}>delete</button>
 				<button onClick={() => setShowTask(true)}>show</button>
 			</li>
