@@ -1,4 +1,5 @@
 import {ChangeEvent} from "react";
+import {tLoadedFile} from "./addTask";
 
 export const downloadPromise=(e: ChangeEvent<HTMLInputElement>)=>{
 	return new Promise(r=>{
@@ -9,8 +10,8 @@ export const downloadPromise=(e: ChangeEvent<HTMLInputElement>)=>{
 			let src: string | ArrayBuffer | null
 			reader.onload =  () => {
 				src =  reader.result;
-				console.log(src)
-				r(src)
+				//src=file.name
+				r({title:file.name,data:src})
 				//const img= f.create('img').attribute('src',src as string).end();
 				//parent.appendChild(img)
 				//console.log('%%',src);

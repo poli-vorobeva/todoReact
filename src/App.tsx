@@ -2,9 +2,11 @@ import * as React from "react";
 import Task from "./Task";
 import {useState} from "react";
 import AddTask, {tTask} from "./addTask";
-// создание, просмотр, редактирование (изменение полей или то, что задача выполнена) и удаление задачи
-// - возможность прикрепления файлов к записи
-// - поля в задаче: заголовок, описание, дата завершения, прикрепленные файлы
+// +создание, +просмотр,
+// редактирование (изменение полей или то, что задача выполнена) и
+// удаление задачи
+// + возможность прикрепления файлов к записи
+// + поля в задаче: заголовок, описание, дата завершения, прикрепленные файлы
 // - если дата завершения истекла или задача выполнена, это должно быть визуально отмечено
 
 const App = () => {
@@ -14,7 +16,8 @@ const App = () => {
 		files: [],
 		time: '',
 		date: '',
-		status: 'open'
+		status: 'open',
+		id:Date.now()
 	},
 		{
 			title: 'Task Two',
@@ -22,18 +25,19 @@ const App = () => {
 			files: [],
 			time: '',
 			date: '',
-			status: 'open'
+			status: 'open',
+			id:Date.now()-10
 		}])
 	const [addTask, setAddTask] = useState(false)
-	// const onAddTask=(task:tTask)=>{
-	//
-	// }
 	return (
 		<div>
 			<button onClick={() => setAddTask(true)}>add Task</button>
 			<ul>
 				{
-					tasks.map(task => <Task task={task}/>)
+					tasks.map(task => <Task key={task.id} task={task}
+																	onDeleteTask={(id)=>setTasks((prev)=>{
+																		return [...prev].filter(e=>e.id!==id)
+																	})}/>)
 				}
 			</ul>
 			{

@@ -11,13 +11,14 @@ export type tTask={
 	status:string,
 	date:string,
 	time:string,
+	id:number
 }
-
+export type tLoadedFile={ data:string | ArrayBuffer | null,title: string}
 const AddTask = ({onAddTask}: { onAddTask: (task: tTask) => void }): JSX.Element => {
 	const [taskData, setTaskData] = useState<{title:string,description:string}>({title:'',description:''})
 	const [titleAlert,setTitleAlert]=useState(false)
 	const [descAlert,setDescAlert]=useState(false)
-	const [loadedFiles,setLoadedFiles]=useState([])
+	const [loadedFiles,setLoadedFiles]=useState<tLoadedFile[]>([])
 	const [time,setTime]=useState(null)
 	const [date,setDate]=useState(null)
 	const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,6 +30,7 @@ const AddTask = ({onAddTask}: { onAddTask: (task: tTask) => void }): JSX.Element
 			files: loadedFiles,
 			status: 'open',
 			date,	time,
+			id:Date.now()
 		})
 	}
 
@@ -44,7 +46,7 @@ const AddTask = ({onAddTask}: { onAddTask: (task: tTask) => void }): JSX.Element
 		}
 	}
 	const onLoadFile=async (e: React.ChangeEvent<HTMLInputElement>)=>{
-		downloadPromise(e).then(d=> {
+		downloadPromise(e).then((d:tLoadedFile)=> {
 			setLoadedFiles(fls=>[...fls, d])
 		})
 	}
