@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 import {tLoadedFile, tTask} from "./addTask";
 import {downloadPromise} from "./downloadFile";
-
+//multi part form data on client
+//formData( append or by field)
+//on server side also find
 interface IEditTask {
 	editTaskData: tTask,
 	onCloseEditTask: () => void,
@@ -62,6 +64,7 @@ const EditTask = ({editTaskData, onCloseEditTask, onEditedTask}:IEditTask) => {
 					)
 				})
 			}
+
 			<p>Files:
 				{files.map(f => {
 					return <span>{f.title}

@@ -9,5 +9,6 @@
     "sourceMap": true,
     "jsx": "react"
   },
-  "files": ["src/index.tsx","./module.d.ts"]
+  "files": [
+    "src/index.tsx","./module.d.ts"]
 }

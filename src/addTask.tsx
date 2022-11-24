@@ -23,15 +23,15 @@ const AddTask = ({onAddTask}: IAddTaskProps): JSX.Element => {
 	const [titleAlert,setTitleAlert]=useState(false)
 	const [descAlert,setDescAlert]=useState(false)
 	const [loadedFiles,setLoadedFiles]=useState<tLoadedFile[]>([])
-	const [time,setTime]=useState(null)
-	const [date,setDate]=useState(null)
+	const [time,setTime]=useState('')
+	const [date,setDate]=useState('')
 
 	const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
 		//todo clean inputs
 		e.preventDefault()
 		onAddTask({
 			title: taskData.title,
-			description: taskData.description,
+			description: taskData.description && taskData.description,
 			files: loadedFiles,
 			status: 'open',
 			date,	time,

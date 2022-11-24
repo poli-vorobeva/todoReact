@@ -3,6 +3,7 @@ import Task from "./Task";
 import {useEffect, useState} from "react";
 import AddTask, {tTask} from "./addTask";
 import EditTask from "./EditTask";
+import {requestEditTasks, requestGetTasks} from "./requestsToServer";
 // +создание, +просмотр,
 // редактирование (изменение полей или то, что задача выполнена) и
 // +удаление задачи
@@ -11,24 +12,8 @@ import EditTask from "./EditTask";
 // - если дата завершения истекла или задача выполнена, это должно быть визуально отмечено
 
 const App = () => {
-	const [tasks, setTasks] = useState<tTask[]>([{
-		title: 'Task one',
-		description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur culpa illum nat',
-		files: [],
-		time: '',
-		date: '',
-		status: 'open',
-		id: Date.now()
-	},
-		{
-			title: 'Task Two',
-			description: 'Consectetur adipisicing elit. Consectetur culpa illum nat',
-			files: [],
-			time: '',
-			date: '',
-			status: 'open',
-			id: Date.now() - 10
-		}])
+	const [tasks, setTasks] = useState<tTask[]>([])
+	const [newTask,setNewTask]=useState<tTask>(null)
 	const [addTask, setAddTask] = useState(false)
 	const [editTask, setEditTask] = useState(false)
 	const [editTaskId, setEditTaskId] = useState(null)
@@ -37,11 +22,26 @@ const App = () => {
 		if (!editTaskId) return
 		setEditTask(true)
 	}, [editTaskId])
+
+	useEffect(()=>{
+		const t =  requestGetTasks()
+		t.then(r=>setTasks(JSON.parse(r)))
+	},[])
+
+	useEffect(()=>{
+		if(!newTask)return
+	const r=requestEditTasks(newTask)
+		r.then(d=>{
+		setTasks(JSON.parse(d))
+			 setAddTask(false)
+		})
+	},[newTask])
+
 	return (
 		<div>
 			<button onClick={() => setAddTask(true)}>add Task</button>
 			<ul>
-				{
+				{tasks.length>0 &&
 					tasks.map(task => <Task key={task.id} task={task}
 																	onEditTask={(id) => setEditTaskId(id)}
 																	onDeleteTask={(id) => setTasks((prev) => {
@@ -51,12 +51,7 @@ const App = () => {
 				}
 			</ul>
 			{
-				addTask && <AddTask
-					onAddTask={(task) => {
-						setTasks(prev => [...prev, task])
-						setAddTask(false)
-					}
-					}/>
+				addTask && <AddTask	onAddTask={(task)=>setNewTask(pr=>task)}/>
 			}
 			{
 				editTask && <EditTask
