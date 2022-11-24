@@ -3,7 +3,7 @@ import Task from "./Task";
 import {useEffect, useState} from "react";
 import AddTask, {tTask} from "./addTask";
 import EditTask from "./EditTask";
-import {requestEditTasks, requestGetTasks} from "./requestsToServer";
+import {requestDeleteTask, requestEditTasks, requestGetTasks} from "./requestsToServer";
 // +создание, +просмотр,
 // редактирование (изменение полей или то, что задача выполнена) и
 // +удаление задачи
@@ -13,61 +13,58 @@ import {requestEditTasks, requestGetTasks} from "./requestsToServer";
 
 const App = () => {
 	const [tasks, setTasks] = useState<tTask[]>([])
-	const [newTask,setNewTask]=useState<tTask>(null)
+	const [newTask, setNewTask] = useState<tTask>(null)
 	const [addTask, setAddTask] = useState(false)
 	const [editTask, setEditTask] = useState(false)
 	const [editTaskId, setEditTaskId] = useState(null)
+	const [deleteTaskId, setDeleteTaskId] = useState(null)
 	//при обновлении данных edittask=null
 	useEffect(() => {
 		if (!editTaskId) return
 		setEditTask(true)
 	}, [editTaskId])
 
-	useEffect(()=>{
-		const t =  requestGetTasks()
-		t.then(r=>setTasks(JSON.parse(r)))
-	},[])
+	useEffect(() => {
+		const t = requestGetTasks()
+		t.then(r => setTasks(JSON.parse(r)))
+	}, [])
 
-	useEffect(()=>{
-		if(!newTask)return
-	const r=requestEditTasks(newTask)
-		r.then(d=>{
-		setTasks(JSON.parse(d))
-			 setAddTask(false)
+	useEffect(() => {
+		if (!newTask) return
+		const r = requestEditTasks(newTask)
+		r.then(d => {
+			setTasks(JSON.parse(d))
+			setAddTask(false)
+			setEditTask(false)
 		})
-	},[newTask])
-
+	}, [newTask])
+	useEffect(() => {
+		if (!deleteTaskId) return
+		const r = requestDeleteTask(deleteTaskId)
+		r.then(d => {
+			setTasks(JSON.parse(d))
+		})
+	}, [deleteTaskId])
 	return (
 		<div>
 			<button onClick={() => setAddTask(true)}>add Task</button>
 			<ul>
-				{tasks.length>0 &&
-					tasks.map(task => <Task key={task.id} task={task}
-																	onEditTask={(id) => setEditTaskId(id)}
-																	onDeleteTask={(id) => setTasks((prev) => {
-																		return [...prev].filter(e => e.id !== id)
-																	})}
-					/>)
+				{tasks.length > 0 &&
+				tasks.map(task => <Task key={task.id} task={task}
+																onEditTask={(id) => setEditTaskId(id)}
+																onDeleteTask={(id) => setDeleteTaskId(id)}
+				/>)
 				}
 			</ul>
 			{
-				addTask && <AddTask	onAddTask={(task)=>setNewTask(pr=>task)}/>
+				addTask && <AddTask onAddTask={(task) => setNewTask(pr => task)}/>
 			}
 			{
 				editTask && <EditTask
-					onEditedTask={(task) => {
-						setTasks(prev => {
-							const taskIdx = prev.findIndex(e => e.id === task.id);
-							const newT = [...prev]
-								newT.splice(taskIdx, 1, task)
-							console.log(newT)
-							return newT
-						})
-					}
-					}
+					onEditedTask={(task) => setNewTask(task)}
 					onCloseEditTask={() => {
 						setEditTask(false)
-						setEditTaskId(null)
+						//		setEditTaskId(null)
 					}}
 					editTaskData={tasks.find(t => t.id === editTaskId)}/>
 			}

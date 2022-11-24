@@ -34,3 +34,13 @@ export async function requestEditTasks(task:tTask){
 		throw new Error(e);
 	}
 }
+export async function requestDeleteTask(deleteTaskId:string){
+	try {
+		const response = await fetch(`http://localhost:3000/${deleteTaskId}`,{	method: "POST", body:deleteTaskId.toString()});
+		const res=await response.text();
+		console.log(res,'!!!')
+		return res
+	} catch (e) {
+		throw new Error(e);
+	}
+}

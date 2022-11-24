@@ -26,8 +26,7 @@ const Task = ({task,onDeleteTask,onEditTask}: ITaskProps): JSX.Element => {
 					right:0,
 					bottom:0,
 					background:'olive'
-				}}
-				onMouseLeave={() => console.log('leave')}>
+				}}>
 				<span onClick={()=>setShowTask(false)}>Х</span>
 				<h6>Title: {task.title}</h6>
 				<p>Date : {task.date}</p>
