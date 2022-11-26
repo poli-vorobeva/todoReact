@@ -11,6 +11,7 @@ declare module '*.jpg' {
 }
 
 declare module '*.css' {
+  // @ts-ignore
   const res: Record<string, string>;
   export default res;
 }

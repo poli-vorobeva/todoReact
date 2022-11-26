@@ -1,16 +1,21 @@
 import * as React from "react";
+import './styles/app.less'
 import Task from "./Task";
 import {useEffect, useState} from "react";
 import AddTask, {tTask} from "./addTask";
 import EditTask from "./EditTask";
-import {requestDeleteTask, requestEditTasks, requestGetTasks} from "./requestsToServer";
+import {requestChangeTaskStatus, requestDeleteTask, requestEditTasks, requestGetTasks} from "./requestsToServer";
 // +создание, +просмотр,
-// редактирование (изменение полей или то, что задача выполнена) и
+//+ редактирование (изменение полей или
+// то, что задача выполнена) и
 // +удаление задачи
 // + возможность прикрепления файлов к записи
 // + поля в задаче: заголовок, описание, дата завершения, прикрепленные файлы
-// - если дата завершения истекла или задача выполнена, это должно быть визуально отмечено
-
+// + если дата завершения истекла или задача выполнена, это должно быть визуально отмечено
+//+todo check empty form
+//todo timer to check task missed
+//todo show img from base64
+//date formatter
 const App = () => {
 	const [tasks, setTasks] = useState<tTask[]>([])
 	const [newTask, setNewTask] = useState<tTask>(null)
@@ -18,7 +23,14 @@ const App = () => {
 	const [editTask, setEditTask] = useState(false)
 	const [editTaskId, setEditTaskId] = useState(null)
 	const [deleteTaskId, setDeleteTaskId] = useState(null)
-	//при обновлении данных edittask=null
+	const [taskNewStatus,setTaskNewStatus]=useState(null)
+	useEffect(()=>{
+		const t = requestChangeTaskStatus(taskNewStatus)
+		t.then(r => {
+			if(!r) return
+			setTasks(JSON.parse(r))
+		})
+	},[taskNewStatus])
 	useEffect(() => {
 		if (!editTaskId) return
 		setEditTask(true)
@@ -38,26 +50,33 @@ const App = () => {
 			setEditTask(false)
 		})
 	}, [newTask])
+
 	useEffect(() => {
 		if (!deleteTaskId) return
 		const r = requestDeleteTask(deleteTaskId)
 		r.then(d => {
+			console.log("D",d)
 			setTasks(JSON.parse(d))
 		})
 	}, [deleteTaskId])
 	return (
-		<div>
-			<button onClick={() => setAddTask(true)}>add Task</button>
+		<div className='main'>
+			<button className='addBtn' onClick={() => setAddTask(true)}>add Task</button>
 			<ul>
 				{tasks.length > 0 &&
 				tasks.map(task => <Task key={task.id} task={task}
+																onChangeStatusP={(data)=>{
+																	setTaskNewStatus(data)
+																}}
 																onEditTask={(id) => setEditTaskId(id)}
 																onDeleteTask={(id) => setDeleteTaskId(id)}
 				/>)
 				}
 			</ul>
 			{
-				addTask && <AddTask onAddTask={(task) => setNewTask(pr => task)}/>
+				addTask && <AddTask
+					onCloseForm={()=>setAddTask(false)}
+					onAddTask={(task) => setNewTask(pr => task)}/>
 			}
 			{
 				editTask && <EditTask
@@ -66,7 +85,7 @@ const App = () => {
 						setEditTask(false)
 						//		setEditTaskId(null)
 					}}
-					editTaskData={tasks.find(t => t.id === editTaskId)}/>
+					editTaskData={tasks.find((t:tTask) => t.id === editTaskId)}/>
 			}
 		</div>
 	)
