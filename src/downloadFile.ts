@@ -11,7 +11,7 @@ export const downloadPromise=(e: ChangeEvent<HTMLInputElement>)=>{
 			reader.onload =  () => {
 				src =  reader.result;
 				//src=file.name
-				r({title:file.name,data:src})
+				r({title:file.name,data:file})
 				//const img= f.create('img').attribute('src',src as string).end();
 				//parent.appendChild(img)
 				//console.log('%%',src);

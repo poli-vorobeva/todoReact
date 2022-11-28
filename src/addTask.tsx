@@ -9,18 +9,18 @@ export type tTask = {
 	description: string,
 	//todo add files type
 	//todo remove files in creation
-	files: any[],
+	files: string[],
 	status: string,
 	date: string,
 	id: number
 }
 
 interface IAddTaskProps {
-	onAddTask: (task: tTask) => void,
+	onAddTask: (task: FormData) => void,
 	onCloseForm: () => void
 }
 
-export type tLoadedFile = { data: string | ArrayBuffer | null, title: string }
+export type tLoadedFile = { data: Blob | null, title: string }
 
 const AddTask = ({onAddTask, onCloseForm}: IAddTaskProps): JSX.Element => {
 	const [taskData, setTaskData] = useState<{ title: string, description: string }>({title: '', description: ''})
@@ -40,14 +40,25 @@ const AddTask = ({onAddTask, onCloseForm}: IAddTaskProps): JSX.Element => {
 			}, 2000)
 			return
 		}
-		onAddTask({
-			title: taskData.title,
-			description: taskData.description && taskData.description,
-			files: loadedFiles,
-			status: 'open',
-			date,
-			id: Date.now()
+
+		const formData=new FormData()
+		formData.append('title',taskData.title)
+		formData.append('description',taskData.description)
+		loadedFiles.forEach(f=>{
+			formData.append('file',f.data,f.title)
 		})
+		formData.append('status','open')
+		formData.append('date',date)
+		formData.append('id',""+Date.now())
+		onAddTask(formData)
+		// onAddTask({
+		// 	title: taskData.title,
+		// 	description: taskData.description && taskData.description,
+		// 	files: loadedFiles,
+		// 	status: 'open',
+		// 	date,
+		// 	id: Date.now()
+		// })
 	}
 
 	const changeInput = (e: React.ChangeEvent<HTMLInputElement>, input: string) => {

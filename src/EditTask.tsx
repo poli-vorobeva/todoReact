@@ -2,21 +2,27 @@ import React, {useState} from "react";
 import {tLoadedFile, tTask} from "./addTask";
 import {downloadPromise} from "./downloadFile";
 import './styles/editTask.less'
-import InputDate from "./InputDate";
-//multi part form data on client
-//formData( append or by field)
-//on server side also find
+import EditInputs from "./EditInputs";
+
 interface IEditTask {
 	editTaskData: tTask,
 	onCloseEditTask: () => void,
-	onEditedTask: (task: tTask) => void
+	onEditedTask: (task: FormData) => void,
+	onDeleteFile:(fileName:string,id:number)=>void
 }
 
-const EditTask = ({editTaskData, onCloseEditTask, onEditedTask}: IEditTask) => {
+export type tTaskData = {
+	title: string,
+	titleText: string,
+	inputType: string,
+	handler: React.Dispatch<React.SetStateAction<string>>
+}
+const EditTask = ({editTaskData, onCloseEditTask,onDeleteFile, onEditedTask}: IEditTask) => {
+	if(!editTaskData)return
 	const [title, setTitle] = useState(editTaskData.title)
 	const [description, setDescription] = useState(editTaskData.description)
 	const [date, setDate] = useState(editTaskData.date)
-	const [files, setFiles] = useState(editTaskData.files)
+	const [file, setFile] = useState([])
 	const taskData = [
 		{
 			title: title,
@@ -39,8 +45,20 @@ const EditTask = ({editTaskData, onCloseEditTask, onEditedTask}: IEditTask) => {
 	]
 	const onAddFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		downloadPromise(e).then((d: tLoadedFile) => {
-			setFiles(fls => [...fls, d])
+			setFile(fls => [...fls, d])
 		})
+	}
+	const onSubmitForm=()=>{
+			const formData = new FormData()
+			formData.append('title', title)
+			formData.append('description', description)
+			file.forEach(f => {
+				f && formData.append('file', f.data, f.title)
+			})
+			formData.append('status', editTaskData.status)
+			formData.append('date', date)
+			formData.append('id', "" + editTaskData.id)
+			onEditedTask(formData)
 	}
 	return (
 		<div className='editTaskWrapper'>
@@ -50,33 +68,18 @@ const EditTask = ({editTaskData, onCloseEditTask, onEditedTask}: IEditTask) => {
 					<span onClick={onCloseEditTask}>X</span>
 				</div>
 				{
-					taskData.map(t => {
-						return (
-							<p>
-								<span>{t.titleText}</span>
-								{t.inputType === 'datetime-local'
-									?  <InputDate taskTime={editTaskData.date} changeHandler={value => t.handler(value)}/>
-									: t.inputType !== 'textArea'
-										? <input type={t.inputType} value={t.title && t.title} onChange={e => t.handler(e.target.value)}/>
-										: <textarea value={t.title} onChange={e => t.handler(e.target.value)}/>
-								}
-							</p>
-						)
-					})
+					taskData.map(t => <EditInputs t={t} date={editTaskData.date}/>)
 				}
-
 				<p>Files:
-					{files.map(f => {
-						return <span>{f.title}
-							<button onClick={() => setFiles(fls => [...fls].filter(e => e.title !== f.title))}>Delete File</button>
+					{
+						editTaskData.files?.map(f => {
+							return <span>{f}
+								<button onClick={() => onDeleteFile(f,editTaskData.id)}>Delete File</button>
 			</span>
-					})}
+						})}
 					<input type='file' onChange={onAddFile}/>
 				</p>
-				<button onClick={() => {
-					onEditedTask({title, description, date, files, status: editTaskData.status, id: editTaskData.id})
-					//console.log(title,description,time,date,files)
-				}}>Ready
+				<button onClick={() => onSubmitForm()}>Ready
 				</button>
 			</div>
 		</div>

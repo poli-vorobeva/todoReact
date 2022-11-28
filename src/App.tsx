@@ -4,48 +4,78 @@ import Task from "./Task";
 import {useEffect, useState} from "react";
 import AddTask, {tTask} from "./addTask";
 import EditTask from "./EditTask";
-import {requestChangeTaskStatus, requestDeleteTask, requestEditTasks, requestGetTasks} from "./requestsToServer";
+import {
+	requestChangeTaskStatus,
+	requestDeleteFile,
+	requestDeleteTask,
+	requestEditTasks,
+	requestGetTasks
+} from "./requestsToServer";
 // +создание, +просмотр,
 //+ редактирование (изменение полей или
-// то, что задача выполнена) и
+// +то, что задача выполнена) и
 // +удаление задачи
 // + возможность прикрепления файлов к записи
 // + поля в задаче: заголовок, описание, дата завершения, прикрепленные файлы
 // + если дата завершения истекла или задача выполнена, это должно быть визуально отмечено
 //+todo check empty form
 //todo timer to check task missed
-//todo show img from base64
-//date formatter
+//+date formatter
+
+//multi part form data on client
+//formData( append or by field)
+//on server side also find
+
 const App = () => {
 	const [tasks, setTasks] = useState<tTask[]>([])
-	const [newTask, setNewTask] = useState<tTask>(null)
+	const [newTask, setNewTask] = useState<FormData>(null)
 	const [addTask, setAddTask] = useState(false)
 	const [editTask, setEditTask] = useState(false)
 	const [editTaskId, setEditTaskId] = useState(null)
 	const [deleteTaskId, setDeleteTaskId] = useState(null)
-	const [taskNewStatus,setTaskNewStatus]=useState(null)
-	useEffect(()=>{
-		const t = requestChangeTaskStatus(taskNewStatus)
+	const [taskNewStatus, setTaskNewStatus] = useState(null)
+	const [deleteFile, setDeleteFile] = useState(null)
+	useEffect(() => {
+		const t = requestDeleteFile(deleteFile)
 		t.then(r => {
-			if(!r) return
+			if (!r) return
+			console.log("@#@#@",JSON.parse(r))
 			setTasks(JSON.parse(r))
 		})
-	},[taskNewStatus])
+	}, [deleteFile])
+
+	useEffect(() => {
+		const t = requestChangeTaskStatus(taskNewStatus)
+		t.then(r => {
+			if (!r) return
+			setTasks(JSON.parse(r))
+		})
+	}, [taskNewStatus])
+
 	useEffect(() => {
 		if (!editTaskId) return
 		setEditTask(true)
 	}, [editTaskId])
 
 	useEffect(() => {
-		const t = requestGetTasks()
-		t.then(r => setTasks(JSON.parse(r)))
-	}, [])
+			const t = requestGetTasks()
+			t.then(r => setTasks(JSON.parse(r)))
+		}
+		, [])
 
 	useEffect(() => {
 		if (!newTask) return
 		const r = requestEditTasks(newTask)
 		r.then(d => {
-			setTasks(JSON.parse(d))
+			const tasks:tTask[]=JSON.parse(d)
+			const missedTask=tasks.find(t=> +new Date(t.date) < +Date.now())
+			//после получения с сервера списка тасок, проверяем, если срок прошел, а статус не мисд то меняем его
+			if(missedTask && missedTask.status!=='missed'){
+				setTaskNewStatus({id:missedTask.id,status:'missed'})
+				const t = requestChangeTaskStatus(taskNewStatus)
+			}else{
+				setTasks(tasks)
+			}
 			setAddTask(false)
 			setEditTask(false)
 		})
@@ -54,10 +84,7 @@ const App = () => {
 	useEffect(() => {
 		if (!deleteTaskId) return
 		const r = requestDeleteTask(deleteTaskId)
-		r.then(d => {
-			console.log("D",d)
-			setTasks(JSON.parse(d))
-		})
+		r.then(d => setTasks(JSON.parse(d)))
 	}, [deleteTaskId])
 	return (
 		<div className='main'>
@@ -65,7 +92,7 @@ const App = () => {
 			<ul>
 				{tasks.length > 0 &&
 				tasks.map(task => <Task key={task.id} task={task}
-																onChangeStatusP={(data)=>{
+																onChangeStatusP={(data) => {
 																	setTaskNewStatus(data)
 																}}
 																onEditTask={(id) => setEditTaskId(id)}
@@ -75,17 +102,18 @@ const App = () => {
 			</ul>
 			{
 				addTask && <AddTask
-					onCloseForm={()=>setAddTask(false)}
+					onCloseForm={() => setAddTask(false)}
 					onAddTask={(task) => setNewTask(pr => task)}/>
 			}
 			{
 				editTask && <EditTask
 					onEditedTask={(task) => setNewTask(task)}
+					onDeleteFile={(f, id) => setDeleteFile({id, file: f})}
 					onCloseEditTask={() => {
 						setEditTask(false)
 						//		setEditTaskId(null)
 					}}
-					editTaskData={tasks.find((t:tTask) => t.id === editTaskId)}/>
+					editTaskData={tasks.find((t: tTask) => t.id === editTaskId)}/>
 			}
 		</div>
 	)
