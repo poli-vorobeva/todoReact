@@ -92,7 +92,7 @@ const dateCur=new Date()
 						<input type="file" onChange={onLoadFile}/>
 						<span>Добавьте файл...</span>
 					</div>
-					<button>Ready</button>
+					<button className="addTaskButton">Ready</button>
 				</form>
 			</div>
 		</>

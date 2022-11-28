@@ -4,6 +4,7 @@ import Task from "./Task";
 import {useEffect, useState} from "react";
 import AddTask, {tTask} from "./addTask";
 import EditTask from "./EditTask";
+//link to server with commits https://github.com/poli-vorobeva/todoServer
 import {
 	requestChangeTaskStatus,
 	requestDeleteFile,
@@ -11,20 +12,6 @@ import {
 	requestEditTasks,
 	requestGetTasks, requestSetMissedTasks
 } from "./requestsToServer";
-// +создание, +просмотр,
-//+ редактирование (изменение полей или
-// +то, что задача выполнена) и
-// +удаление задачи
-// + возможность прикрепления файлов к записи
-// + поля в задаче: заголовок, описание, дата завершения, прикрепленные файлы
-// + если дата завершения истекла или задача выполнена, это должно быть визуально отмечено
-//+todo check empty form
-//todo timer to check task missed
-//+date formatter
-
-//multi part form data on client
-//formData( append or by field)
-//on server side also find
 
 const App = () => {
 	const [tasks, setTasks] = useState<tTask[]>([])
@@ -39,7 +26,6 @@ const App = () => {
 		const t = requestDeleteFile(deleteFile)
 		t.then(r => {
 			if (!r) return
-			console.log("@#@#@", JSON.parse(r))
 			setTasks(JSON.parse(r))
 		})
 	}, [deleteFile])
@@ -64,10 +50,8 @@ const App = () => {
 			const missedTasksArr = checkMissedTasks(tasks)
 			//после получения с сервера списка тасок, проверяем, если срок прошел, а статус не мисд то меняем его
 			if (!!missedTasksArr.length) {
-				console.log(missedTasksArr, '###@@@@missed')
 				const t = requestSetMissedTasks(missedTasksArr)
 				t.then(apdTs => {
-					console.log(JSON.parse(apdTs), '####')
 					const apdtdTasks = JSON.parse(apdTs)
 					setTasks(apdtdTasks)
 				})
@@ -124,6 +108,7 @@ const App = () => {
 					onDeleteFile={(f, id) => setDeleteFile({id, file: f})}
 					onCloseEditTask={() => {
 						setEditTask(false)
+						setEditTaskId(null)
 					}}
 					editTaskData={tasks.find((t: tTask) => t.id === editTaskId)}/>
 			}

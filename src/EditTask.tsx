@@ -49,7 +49,6 @@ const EditTask = ({editTaskData, onCloseEditTask,onDeleteFile, onEditedTask}: IE
 		})
 	}
 	const onSubmitForm=()=>{
-		console.log(editTaskData.status,'$')
 			const formData = new FormData()
 			formData.append('title', title)
 			formData.append('description', description)
