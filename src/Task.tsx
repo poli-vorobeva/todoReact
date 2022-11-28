@@ -17,18 +17,23 @@ const Task = ({task, onDeleteTask, onEditTask, onChangeStatusP}: ITaskProps): JS
 	const onChangeStatus = (status: string) => {
 		onChangeStatusP({status, id: task.id})
 	}
-	const bgStyle = task.status === 'open' ? 'orange' : task.status === 'missed' ? 'red' : 'green'
+	console.log(task.title,'-',task.status)
+	const bgStyle = task.status == 'open' ? '#b34d02' : task.status == 'missed' ? '#6d022f' : '#05a06b'
 	const dt = dayjs(task.date).format('MMMM D, YYYY h:mm A')
 	return (
 		<>
-			<li style={{background: bgStyle}}>
-				<span>{task.title}</span>
-				{
-					task.date && dt !== 'Invalid Date' && <span>{dt}</span>
-				}
-				<button onClick={() => onEditTask(task.id)}>edit</button>
+			<li className='taskItem' style={{background: bgStyle}}>
+				<span className={'taskTitle'}>
+						<span>{task.title}</span>
+					{
+						task.date && dt !== 'Invalid Date' && <span>{dt}</span>
+					}
+				</span>
+				<span className='taskButtonsWrapper'>
+						<button onClick={() => onEditTask(task.id)}>edit</button>
 				<button onClick={() => onDeleteTask(task.id)}>delete</button>
 				<button onClick={() => setShowTask(true)}>show</button>
+				</span>
 			</li>
 			{
 				showTask &&

@@ -1,31 +1,50 @@
-.editTaskWrapper{
+@import 'mixins.less';
+
+.editTaskWrapper {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: #d0c1c1cc;
- .insideDiv{
-    margin: 50px auto;
-    background-color: #1c4663;
+  background: rgba(88, 84, 84, 0.8);
+  color: white;
+  letter-spacing: 2px;
+
+  .insideDiv {
     width: 400px;
     padding: 20px;
-   color:white;
-   margin-bottom: 10px;
-    div{
+    .modal;
+    margin: 30px auto;
+
+    div {
       display: flex;
       justify-content: space-between;
       width: 100%;
-      span{
+
+      span {
         font-size: 30px;
       }
     }
   }
-  p{
+
+  .close {
+    .close
+  }
+
+  h6 {
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  p {
     display: flex;
     justify-content: space-between;
     width: 100%;
     padding: 10px;
     border-bottom: 2px solid #dad9d40d;
+  }
+
+  button {
+    .button
   }
 }

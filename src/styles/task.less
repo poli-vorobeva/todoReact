@@ -1,18 +1,43 @@
-.taskWrapper{
+@import "mixins.less";
+
+.taskWrapper {
   position: absolute;
   top: 0;
   left: 0;
-  right:0;
-  bottom:0;
-  background: #b9b96f
+  right: 0;
+  bottom: 0;
 }
-.taskInside{
+
+.taskInside {
   width: 80%;
   height: 50%;
   margin: 30px auto;
   background: antiquewhite;
   padding: 10px;
 }
-.activeButtonStatus{
+
+.activeButtonStatus {
   background-color: green;
+}
+
+.taskItem {
+  display: flex;
+  flex-flow: column nowrap;
+
+  .modal
+}
+.taskTitle{
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.taskButtonsWrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: end;
+  margin-top: 20px;
+  button{
+    .button
+  }
 }

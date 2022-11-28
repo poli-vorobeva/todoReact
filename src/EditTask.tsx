@@ -49,6 +49,7 @@ const EditTask = ({editTaskData, onCloseEditTask,onDeleteFile, onEditedTask}: IE
 		})
 	}
 	const onSubmitForm=()=>{
+		console.log(editTaskData.status,'$')
 			const formData = new FormData()
 			formData.append('title', title)
 			formData.append('description', description)
@@ -65,7 +66,7 @@ const EditTask = ({editTaskData, onCloseEditTask,onDeleteFile, onEditedTask}: IE
 			<div className='insideDiv'>
 				<div>
 					<h6>EditTask</h6>
-					<span onClick={onCloseEditTask}>X</span>
+					<span className='close' onClick={onCloseEditTask}>X</span>
 				</div>
 				{
 					taskData.map(t => <EditInputs t={t} date={editTaskData.date}/>)

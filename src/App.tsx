@@ -124,7 +124,6 @@ const App = () => {
 					onDeleteFile={(f, id) => setDeleteFile({id, file: f})}
 					onCloseEditTask={() => {
 						setEditTask(false)
-						//		setEditTaskId(null)
 					}}
 					editTaskData={tasks.find((t: tTask) => t.id === editTaskId)}/>
 			}
