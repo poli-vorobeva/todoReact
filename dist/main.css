@@ -1,0 +1,292 @@
+.modal {
+  background: #1c4663;
+  border: none;
+  outline: none;
+  padding: 10px;
+  border-radius: 10px ;
+  box-shadow: inset 0 0 5px 1px rgba(44, 234, 217, 0.57);
+}
+.close {
+  cursor: pointer;
+  transition: all ease 500ms;
+}
+.close:hover {
+  color: wheat;
+  transform: rotate(360deg);
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.main {
+  background-color: #6f798d;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  padding: 20px;
+}
+.main .addBtn {
+  height: 50px;
+  margin-left: 5px;
+  padding: 5px;
+  border: none;
+  outline: none;
+  color: #333124;
+  background: #cbc592;
+  border-radius: 10px;
+}
+.main ul {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  list-style: none;
+}
+.main ul li {
+  width: 70vw;
+  margin: 10px;
+  background: #4e4b4b;
+  padding: 10px;
+  color: white;
+}
+
+.modal {
+  background: #1c4663;
+  border: none;
+  outline: none;
+  padding: 10px;
+  border-radius: 10px ;
+  box-shadow: inset 0 0 5px 1px rgba(44, 234, 217, 0.57);
+}
+.close {
+  cursor: pointer;
+  transition: all ease 500ms;
+}
+.close:hover {
+  color: wheat;
+  transform: rotate(360deg);
+}
+.taskWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.taskInside {
+  width: 80%;
+  height: 50%;
+  margin: 30px auto;
+  background: antiquewhite;
+  padding: 10px;
+}
+.activeButtonStatus {
+  background-color: green;
+}
+.taskItem {
+  display: flex;
+  flex-flow: column nowrap;
+  background: #1c4663;
+  border: none;
+  outline: none;
+  padding: 10px;
+  border-radius: 10px ;
+  box-shadow: inset 0 0 5px 1px rgba(44, 234, 217, 0.57);
+}
+.taskTitle {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+.taskButtonsWrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: end;
+  margin-top: 20px;
+}
+.taskButtonsWrapper button {
+  margin-left: 5px;
+  padding: 5px;
+  border: none;
+  outline: none;
+  color: #333124;
+  background: #cbc592;
+  border-radius: 10px;
+}
+
+.modal {
+  background: #1c4663;
+  border: none;
+  outline: none;
+  padding: 10px;
+  border-radius: 10px ;
+  box-shadow: inset 0 0 5px 1px rgba(44, 234, 217, 0.57);
+}
+.close {
+  cursor: pointer;
+  transition: all ease 500ms;
+}
+.close:hover {
+  color: wheat;
+  transform: rotate(360deg);
+}
+.taskWrapper {
+  width: 500px;
+  height: 300px;
+}
+.taskInside {
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  background: #1c4663;
+  border: none;
+  outline: none;
+  padding: 10px;
+  border-radius: 10px ;
+  box-shadow: inset 0 0 5px 1px rgba(44, 234, 217, 0.57);
+  color: white;
+  letter-spacing: 1px;
+}
+.statusButton {
+  margin-left: 5px;
+  padding: 5px;
+  border: none;
+  outline: none;
+  color: #333124;
+  background: #cbc592;
+  border-radius: 10px;
+}
+.activeButtonStatus {
+  margin-left: 5px;
+  padding: 5px;
+  border: none;
+  outline: none;
+  color: #333124;
+  background: 'orange';
+  border-radius: 10px;
+}
+
+.addTaskFormWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(237, 229, 229, 0.61);
+}
+.addTaskFormWrapper .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 30px;
+  cursor: pointer;
+}
+.addTaskForm {
+  background-color: red;
+  width: 40vw;
+  height: 50vh;
+  margin: 0 auto;
+  position: relative;
+  top: 50px;
+  display: flex;
+  flex-flow: column;
+  padding: 30px;
+}
+.addTaskForm input {
+  margin: 10px;
+}
+.fileWrapper {
+  position: relative;
+  width: 90%;
+  margin: 10px auto;
+  background: antiquewhite;
+  height: 50px;
+  overflow: hidden;
+}
+.fileWrapper input {
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.fileWrapper span {
+  display: block;
+  text-align: center;
+  line-height: 40px;
+}
+
+.modal {
+  background: #1c4663;
+  border: none;
+  outline: none;
+  padding: 10px;
+  border-radius: 10px ;
+  box-shadow: inset 0 0 5px 1px rgba(44, 234, 217, 0.57);
+}
+.close {
+  cursor: pointer;
+  transition: all ease 500ms;
+}
+.close:hover {
+  color: wheat;
+  transform: rotate(360deg);
+}
+.editTaskWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(88, 84, 84, 0.8);
+  color: white;
+  letter-spacing: 2px;
+}
+.editTaskWrapper .insideDiv {
+  width: 400px;
+  padding: 20px;
+  background: #1c4663;
+  border: none;
+  outline: none;
+  padding: 10px;
+  border-radius: 10px ;
+  box-shadow: inset 0 0 5px 1px rgba(44, 234, 217, 0.57);
+  margin: 30px auto;
+}
+.editTaskWrapper .insideDiv div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.editTaskWrapper .insideDiv div span {
+  font-size: 30px;
+}
+.editTaskWrapper .close {
+  cursor: pointer;
+  transition: all ease 500ms;
+}
+.editTaskWrapper h6 {
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.editTaskWrapper p {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  border-bottom: 2px solid #dad9d40d;
+}
+.editTaskWrapper button {
+  margin-left: 5px;
+  padding: 5px;
+  border: none;
+  outline: none;
+  color: #333124;
+  background: #cbc592;
+  border-radius: 10px;
+}
+
+
+/*# sourceMappingURL=main.css.map*/
