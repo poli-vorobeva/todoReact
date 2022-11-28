@@ -29,12 +29,14 @@ const ShowTask=({task,onChangeStatus,setShowTask}:IShowTask)=>{
 				<div>
 					<p>Статус:
 						{
-							buttonsObj.map(b=><button className={b.status===task.status && 'activeButtonStatus'}
-																				onClick={() => {
-																					setStatus(b.status)
-																					onChangeStatus(b.status)
-																				}}
-							>{b.title}</button>)
+							buttonsObj.map(b=> {
+								return <button className={b.status == task.status ? 'activeButtonStatus':undefined}
+												onClick={() => {
+													setStatus(b.status)
+													onChangeStatus(b.status)
+												}}
+								>{b.title}</button>
+							})
 						}
 					</p>
 				</div>

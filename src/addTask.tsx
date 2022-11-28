@@ -1,6 +1,6 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
-import {downloadFile, downloadPromise} from "./downloadFile";
+import { useState} from "react";
+import { downloadPromise} from "./downloadFile";
 import './styles/addTask.less'
 import InputDate from "./InputDate";
 
@@ -29,10 +29,11 @@ const AddTask = ({onAddTask, onCloseForm}: IAddTaskProps): JSX.Element => {
 	const [submitAlert, setSubmitAlert] = useState(false)
 	const [loadedFiles, setLoadedFiles] = useState<tLoadedFile[]>([])
 	const [date, setDate] = useState('')
-
+const dateCur=new Date()
+	const defaultDate=`${dateCur.getFullYear()}-${dateCur.getMonth()}-${dateCur.getDate()+2}T${dateCur.getHours()}:${dateCur.getMinutes()}`
 	const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		if (!taskData.title || !taskData.description || !date ) {
+		if (!taskData.title || !taskData.description ) {
 			setSubmitAlert(true)
 			const intr = setInterval(() => {
 				setSubmitAlert(false)
@@ -48,17 +49,9 @@ const AddTask = ({onAddTask, onCloseForm}: IAddTaskProps): JSX.Element => {
 			formData.append('file',f.data,f.title)
 		})
 		formData.append('status','open')
-		formData.append('date',date)
+		formData.append('date',date || defaultDate )
 		formData.append('id',""+Date.now())
 		onAddTask(formData)
-		// onAddTask({
-		// 	title: taskData.title,
-		// 	description: taskData.description && taskData.description,
-		// 	files: loadedFiles,
-		// 	status: 'open',
-		// 	date,
-		// 	id: Date.now()
-		// })
 	}
 
 	const changeInput = (e: React.ChangeEvent<HTMLInputElement>, input: string) => {

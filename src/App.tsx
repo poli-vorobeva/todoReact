@@ -9,7 +9,7 @@ import {
 	requestDeleteFile,
 	requestDeleteTask,
 	requestEditTasks,
-	requestGetTasks
+	requestGetTasks, requestSetMissedTasks
 } from "./requestsToServer";
 // +создание, +просмотр,
 //+ редактирование (изменение полей или
@@ -39,7 +39,7 @@ const App = () => {
 		const t = requestDeleteFile(deleteFile)
 		t.then(r => {
 			if (!r) return
-			console.log("@#@#@",JSON.parse(r))
+			console.log("@#@#@", JSON.parse(r))
 			setTasks(JSON.parse(r))
 		})
 	}, [deleteFile])
@@ -58,24 +58,37 @@ const App = () => {
 	}, [editTaskId])
 
 	useEffect(() => {
-			const t = requestGetTasks()
-			t.then(r => setTasks(JSON.parse(r)))
-		}
-		, [])
-
+		const rq = requestGetTasks()
+		rq.then((r) => {
+			const tasks: tTask[] = JSON.parse(r)
+			const missedTasksArr = checkMissedTasks(tasks)
+			//после получения с сервера списка тасок, проверяем, если срок прошел, а статус не мисд то меняем его
+			if (!!missedTasksArr.length) {
+				console.log(missedTasksArr, '###@@@@missed')
+				const t = requestSetMissedTasks(missedTasksArr)
+				t.then(apdTs => {
+					console.log(JSON.parse(apdTs), '####')
+					const apdtdTasks = JSON.parse(apdTs)
+					setTasks(apdtdTasks)
+				})
+			} else {
+				setTasks(tasks)
+			}
+		})
+	}, [])
+	const checkMissedTasks = (tasks: tTask[]): number[] => {
+		return tasks.map(t => {
+			if (t.status === 'open' && (+new Date(t.date) < +Date.now()) || !+new Date(t.date)) {
+				return t.id
+			}
+		})
+	}
 	useEffect(() => {
 		if (!newTask) return
 		const r = requestEditTasks(newTask)
 		r.then(d => {
-			const tasks:tTask[]=JSON.parse(d)
-			const missedTask=tasks.find(t=> +new Date(t.date) < +Date.now())
-			//после получения с сервера списка тасок, проверяем, если срок прошел, а статус не мисд то меняем его
-			if(missedTask && missedTask.status!=='missed'){
-				setTaskNewStatus({id:missedTask.id,status:'missed'})
-				const t = requestChangeTaskStatus(taskNewStatus)
-			}else{
-				setTasks(tasks)
-			}
+			const tasks: tTask[] = JSON.parse(d)
+			setTasks(tasks)
 			setAddTask(false)
 			setEditTask(false)
 		})

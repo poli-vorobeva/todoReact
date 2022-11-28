@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 
-
 const getDiaposone = (dateString: string, op: string) => {
 	const datesplit = dateString.split('T')
 	const d = datesplit[0].split('-')
@@ -13,10 +12,9 @@ const getDiaposone = (dateString: string, op: string) => {
 const InputDate = ({changeHandler, taskTime}: { taskTime?: string, changeHandler: (value: string) => void }) => {
 	const date = new Date()
 	const now = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}T${date.getHours()}:${date.getMinutes()}`
-	const defaultDate=`${date.getFullYear()}-${date.getMonth()}-${date.getDate()+2}T${date.getHours()}:${date.getMinutes()}`
 	const min = getDiaposone(now, '-')
 	const max = getDiaposone(now, '+')
-	const [value, setValue] = useState(taskTime || defaultDate)
+	const [value, setValue] = useState(taskTime || now)
 
 	return (
 		<input type="datetime-local"

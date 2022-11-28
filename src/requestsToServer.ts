@@ -40,6 +40,17 @@ export async function requestEditTasks(task: FormData) {
 		throw new Error(e);
 	}
 }
+export async function requestSetMissedTasks(missedTasks:number[]){
+	try {
+		const response = await fetch(`${baseurl}missed`, {
+			method: "POST",
+			body: JSON.stringify(missedTasks)
+		});
+		return await response.text();
+	} catch (e) {
+		throw new Error(e);
+	}
+}
 export async function requestDeleteFile(deleteFile:{ id: number, file:string }){
 	if(!deleteFile)return
 	try {
